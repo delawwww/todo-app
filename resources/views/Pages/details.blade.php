@@ -25,10 +25,13 @@
                                 di {{$task->list->name}}
                             </span>
                         </h3>
+                        @if (!$task->is_completed) 
                         <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#editTaskModal">
-                        <i class="bi bi-pencil-square"></i>
+                            <i class="bi bi-pencil-square"></i>
                         </button>
+                        @endif
+                    
                     </div>
                     <div class="card-body">
                         <p>
@@ -39,9 +42,11 @@
                         <form action="{{ route('tasks.destroy', $task->id)}}" method="POST">
                             @csrf
                             @method('DELETE')
+                            @if (!$task->is_completed) 
                             <button type="submit" class="btn btn-sm btn-outline-danger w-100">
                             Hapus
                             </button>
+                            @endif
                         </form>
                     </div>
                 </div>
@@ -56,6 +61,7 @@
                         <form action="{{ route('tasks.changeList', $task->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
+                            @if (!$task->is_completed) 
                             <select class="form-select" name="list_id" onchange="this.form.submit()">
                                 @foreach ($lists as $list)
                                     <option value="{{ $list->id }}" {{ $list->id == $task->list_id ? 'selected' : '' }}>
@@ -63,6 +69,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @endif
                         </form>
                         <h6 class="fs-6">
                             Prioritas:

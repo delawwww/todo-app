@@ -52,13 +52,15 @@
                                     <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         @method('DELETE')
+                                        @if (!$task->is_completed) 
                                         <button type="submit" class="btn btn-sm p-0">
                                             <i class="bi bi-x-circle text-danger fs-5"></i>
                                         </button>
+                                        @endif
                                     </form>
                                 </div>
-                                <div class="card-body">
-                                    <p class="card-text text-truncate">{{ $task->description }}</p>
+                                <div class="card-body"><!--bagian task card yang mengatur tentang tampilan card menyesuaikan dengan isi deskripsi-->
+                                    <p class="card-text text-truncate" style="width:40vh">{{ $task->description }}</p>
                                 </div>
                                 @if (!$task->is_completed)
                                     <div class="card-footer">

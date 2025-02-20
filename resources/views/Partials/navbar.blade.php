@@ -15,13 +15,11 @@
     <!-- Kontainer Profil -->
     <div class="container-fluid d-flex flex-column align-items-center justify-content-center text-white" style="height: 250px;">
         <!-- Foto Profil -->
-             <a href="">
                 <img src="{{ asset('images/profileweb.jpg') }}" 
                 alt="Profile Picture" 
                 style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; object-fit: cover;" 
                 class="">
-             </a>
-        
+             
         <!-- Nama Pengguna -->
         <h2 class="mt-2">Dela Novela</h2>
     </div>
