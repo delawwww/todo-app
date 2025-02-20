@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\TaskList;
 use Illuminate\Http\Request;
+use App\Http\SearchController;
 
 class TaskController extends Controller
 {
@@ -13,14 +14,14 @@ class TaskController extends Controller
     {
         $data = [
             'title' => 'Home',
-            'taskLists' => TaskList::all(),
+            'taskLists' => TaskList::all(), // Pastikan ini ada
             'tasks' => Task::orderBy('created_at', 'desc')->get(),
             'priorities' => Task::PRIORITIES
         ];
-
+    
         return view('pages.home', $data);
     }
-
+    
     //store() → Menyimpan tugas baru ke database.
     public function store(Request $request)
     {

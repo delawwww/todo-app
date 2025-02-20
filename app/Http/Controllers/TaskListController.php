@@ -6,6 +6,7 @@ use App\Models\TaskList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+
 class TaskListController extends Controller
 {
     public function store(Request $request) {

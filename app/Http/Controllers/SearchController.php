@@ -17,7 +17,7 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         // Mengambil input pencarian dari permintaan
-        $query = $request->input('input');
+        $query = $request->input('query');
 
         // Validasi input, memastikan query minimal 3 karakter dan merupakan string
         $request->validate([

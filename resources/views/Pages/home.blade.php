@@ -1,7 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.app') <!--Menggunakan layout 'app' yang umum di aplikasi laravel-->
 
-@section('content')
-    <!-- Container utama untuk konten -->
+@section('content')<!-- Container utama untuk konten -->
+    
+    <!-- Memulai kontainer untuk daftar tugas -->
     <div id="content" class="overflow-y-hidden overflow-x-hidden p-3">
         {{-- Periksa apakah tidak ada daftar tugas (taskLists) yang tersedia --}}
         @if ($taskLists->count() == 0)
@@ -9,7 +10,7 @@
                 <p class="fw-bold text-center">Belum ada tugas yang ditambahkan</p>
                 <button type="button" class="btn btn-sm d-flex align-items-center gap-2 btn-outline-warning" style="width: fit-content;">
                     <i class="bi bi-plus-square fs-3"></i> Tambah
-                
+                </button>
             </div>
         @endif
 
@@ -18,9 +19,13 @@
             {{-- Iterasi semua daftar tugas (taskLists) --}}
             @foreach ($taskLists as $list)
                 <!-- Kartu daftar tugas -->
-                <div class="task-list card flex-shrink-0 bg-info" style="width: 18rem; max-height: 80vh;">
+                <div class="task-list card flex-shrink-0 bg-info" style="max-height: 80vh;">
+
+                    <!--Menampilkan header kartu untuk list tugas-->
                     <div class="card-header bg-light text-secondary d-flex align-items-center justify-content-between">
                         <h4 class="card-title" style="font-size:18px">{{ $list->name }}</h4>
+
+                        <!--Form untuk menghapus list tugas-->
                         <form action="{{ route('lists.destroy', $list->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
@@ -29,8 +34,10 @@
                             </button>
                         </form>
                     </div>
+
+                    <!--Menampilkan isi tugas dalam list ini-->
                     <div class="card-body bg-light d-flex flex-column gap-2 overflow-x-hidden">
-                        @foreach ($tasks->where('list_id', $list->id) as $task)
+                       @foreach ($tasks->where('list_id', $list->id) as $task)
                             <!-- Kartu tugas -->
                             <div class="task card">
                                 <div class="card-header bg-light d-flex align-items-center justify-content-between">
@@ -75,8 +82,14 @@
                                </span>
                         </button>
                     </div>
+                    <!--footer card jumlah tugas yang ada dalam task-->
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <p class="card-text">{{ $list->tasks->count() }} Tugas</p>
+                    </div>
                 </div>
             @endforeach
+
+            <!--Tombol untuk menambahkan list baru-->
             <button type="button" class="btn btn-outline-info flex-shrink-0" style="width: 18rem; height: fit-content;"
             data-bs-toggle="modal" data-bs-target="#addListModal">
                 <span class="d-flex align-items-center justify-content-center">
@@ -87,17 +100,18 @@
         </div>
     </div>
 
+    <!--Script mengenai pencarian tugas-->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('search-input'); // Pastikan ada input dengan ID ini
-            searchInput = addEventListener('input', function () {
+            searchInput.addEventListener('input', function () {
                 const query = searchInput.value.trim();
     
                 if (query.length >= 3){
-                    fetch(`/search?query=${query}`)
+                    fetch(`/search?query=${query}`)//Mengirim permintaan pencarian ke server(search)
                     .then(response => response.json())
                     .then(data => {
-                        renderSearchResults(data);
+                        renderSearchResults(data);//Menampilkan hasil pencarian
                     })
                     .catch(error => console.error('Error fetching search results:', error));
                 }
@@ -112,8 +126,9 @@
                 return;
                 }
     
-                let contentHTML = '<div class="d-flex gap-3 px3 flex-nowrap overflow-x-scroll overflow-y-hidden" style="height: 80vh;"></div>';
-    
+                let contentHTML = '<div class="d-flex gap-3 px3 flex-nowrap overflow-x-scroll overflow-y-hidden"></div>';
+                
+                //Menampilkan list tugas yang sesuai dengan hasil pencarian
                 data.task_lists.forEach(list => {
                     contentHTML += `
                     <div class="card flex-shrink-0 bg-info" style="width: 18rem; max-height: 80vh;">
@@ -125,12 +140,13 @@
                     </div>`;
     
                 const filteredTasks = data.tasks.filter(task => task.list_id === list.id);
+                //Menyaring tugas sesuai dengan list
                 filteredTasks.forEach(task => {
                     contentHTML += `
-                    <div class="card">
+                    <div class="card flex-shrink-0" style="width: 18rem; max-height: 80vh;">
                         <div class="card-header d-flex align-items-center justify-content-between">
                             <div class="d-flex flex-column justify-content-center gap-2">
-                                <a href="/tasks/${task.id}" class="fw-bold 1h-1 m-0 ${task.is_completed ? 'text-decoration-line-through' : ''}">
+                                <a href="/tasks/${task.id}" class="fw-bold lh-1 m-0 ${task.is_completed ? 'text-decoration-line-through' : ''}">
                                     ${task.name}
                                     </a>
                                     <span class="badge text-bg-${task.priority}" 
@@ -144,11 +160,11 @@
                                     `;
                 });
     
-                contentHTML += '</div></div>'; // Tutu[ list div]
+                contentHTML += '</div></div>'; // Tutup[ list div]
                 });
     
                 contentHTML += '</div>'; // Tutup container utama
-                container.innerHTML = contentHTML;
+                container.innerHTML = contentHTML;//Menampilkan konten yang sudah di filter
             }
         });
     </script>

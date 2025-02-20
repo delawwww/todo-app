@@ -4,7 +4,7 @@
     <div id="content" class="container pb-3">
         <div class="d-flex align-items-center justify-content center">
             <a href="{{ route('home')}}" class="btn btn-sm fw-bold fs-4">
-                <i class="bi bi-arrow-left-short"></i>
+                <i class="bi bi-arrow-left-short"></i><!--tombol icon kembali ketika task memunculkan tasklist-->
                 Kembali
             </a>
         </div>
@@ -65,7 +65,7 @@
                             </select>
                         </form>
                         <h6 class="fs-6">
-                            Priotitas:
+                            Prioritas:
                             <span class="badge text-bg-{{ $task->priorityClass }} badge-pill" style="width: fit-content">
                                 {{ $task->priority }}
                             </span>
