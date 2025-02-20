@@ -42,7 +42,7 @@
                             <div class="task card">
                                 <div class="card-header bg-light d-flex align-items-center justify-content-between">
                                     <div class="d-flex flex-column justify-content-center gap-2">
-                                        <a href="{{ route('tasks.show', $task->id) }}" class="fw-bold lh-1 m-0 {{ $task->is_completed ? 'text-decoration-line-through' : '' }}">
+                                        <a href="{{ route('tasks.show', $task->id) }}" class="fw-bold lh-1 m-0 {{ $task->is_completed ? 'text-decoration-line-through' : '' }}">    
                                             {{ $task->name }}
                                         </a>
                                         <span class="badge text-bg-{{ $task->priorityClass }} badge-pill" style="width: fit-content">
@@ -102,72 +102,72 @@
         </div>
     </div>
 
-    <!--Script mengenai pencarian tugas-->
+    
+
+    <!-- Script untuk menangani pencarian tugas -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('search-input'); // Pastikan ada input dengan ID ini
+            const searchInput = document.getElementById('search-input'); // Input pencarian
             searchInput.addEventListener('input', function () {
                 const query = searchInput.value.trim();
     
-                if (query.length >= 3){
-                    fetch(`/search?query=${query}`)//Mengirim permintaan pencarian ke server(search)
-                    .then(response => response.json())
-                    .then(data => {
-                        renderSearchResults(data);//Menampilkan hasil pencarian
-                    })
-                    .catch(error => console.error('Error fetching search results:', error));
+                if (query.length >= 3) {
+                    fetch(`/search?query=${query}`) // Mengirim permintaan pencarian ke server
+                        .then(response => response.json())
+                        .then(data => {
+                            renderSearchResults(data); // Menampilkan hasil pencarian
+                        })
+                        .catch(error => console.error('Error fetching search results:', error));
                 }
             });
-            // Fungsi renderSearchResults akan memperbarui konten dengan hasil pencarian tugas dan daftar tugas.
+    
             function renderSearchResults(data) {
-                const container = document.getElementById('content'); // Pastikan ini ID kontainer tugas anda 
-                container.innerHTML = ''; // Hapus semua isi lama
+                const container = document.getElementById('content'); // Kontainer untuk tugas
+                container.innerHTML = ''; // Menghapus konten lama
     
                 if (data.task_lists.length === 0 && data.tasks.length === 0) {
                     container.innerHTML = '<p class="fw-bold text-center">Tidak ada hasil ditemukan</p>';
-                return;
+                    return;
                 }
     
-                let contentHTML = '<div class="d-flex gap-3 px3 flex-nowrap overflow-x-scroll overflow-y-hidden"></div>';
-                
-                //Menampilkan list tugas yang sesuai dengan hasil pencarian
+                let contentHTML = '<div class="d-flex gap-3 px-3 flex-nowrap overflow-x-scroll overflow-y-hidden" style="height: 80vh;">';
+    
+                // Menampilkan list tugas yang sesuai dengan hasil pencarian
                 data.task_lists.forEach(list => {
                     contentHTML += `
-                    <div class="card flex-shrink-0 bg-info" style="width: 18rem; max-height: 80vh;">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <h4 class="card-title">${list.name}</h4>
-                        </div>
-                        <div class="card-body d-flex flex-column gap-2 overflow-x-hidden">
-                        </div>
-                    </div>`;
+                        <div class="card flex-shrink-0 bg-info" style="width: 18rem; max-height: 80vh;">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                                <h4 class="card-title">${list.name}</h4>
+                            </div>
+                            <div class="card-body d-flex flex-column gap-2 overflow-x-hidden">
+                    `;
     
-                const filteredTasks = data.tasks.filter(task => task.list_id === list.id);
-                //Menyaring tugas sesuai dengan list
-                filteredTasks.forEach(task => {
-                    contentHTML += `
-                    <div class="card flex-shrink-0" style="width: 18rem; max-height: 80vh;">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                            <div class="d-flex flex-column justify-content-center gap-2">
-                                <a href="/tasks/${task.id}" class="fw-bold lh-1 m-0 ${task.is_completed ? 'text-decoration-line-through' : ''}">
-                                    ${task.name}
-                                    </a>
-                                    <span class="badge text-bg-${task.priority}" 
-                                    style="width: fit-content">${task.priority}</span>
+                    const filteredTasks = data.tasks.filter(task => task.list_id === list.id); // Menyaring tugas sesuai dengan list
+                    filteredTasks.forEach(task => {
+                        contentHTML += `
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <div class="d-flex flex-column justify-content-center gap-2">
+                                        <a href="/tasks/${task.id}" class="fw-bold lh-1 m-0 ${task.is_completed ? 'text-decoration-line-through' : ''}">
+                                            ${task.name}
+                                        </a>
+                                        <span class="badge text-bg-${task.priority}" style="width: fit-content">${task.priority}</span>
                                     </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="card-text text-truncate">${task.description ?? ''}</p>
-                                        </div>
-                                    </div>
-                                    `;
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text text-truncate">${task.description ?? ''}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+    
+                    contentHTML += '</div></div>'; // Menutup div list
                 });
     
-                contentHTML += '</div></div>'; // Tutup[ list div]
-                });
-    
-                contentHTML += '</div>'; // Tutup container utama
-                container.innerHTML = contentHTML;//Menampilkan konten yang sudah di filter
+                contentHTML += '</div>'; // Menutup kontainer utama
+                container.innerHTML = contentHTML; // Menampilkan konten yang sudah difilter
             }
         });
     </script>
+
 @endsection
