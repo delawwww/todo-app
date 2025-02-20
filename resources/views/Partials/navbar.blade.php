@@ -33,5 +33,14 @@
             {{ config('app.name') }} <!-- Nama aplikasi yang diambil dari konfigurasi -->
         </a>
     </div>
+    <div class="container-fluid">
+        <div class="d-flex ms-auto"> 
+            <!-- Input pencarian dengan tombol Search dan Fresh -->
+        <form class="d-flex" action="{{ route('search') }}" method="GET" role="search">
+            <input id="search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light" type="button" onclick="window.location.reload();">Refresh</button>
+        </form>
+        </div>
+    </div>
 </nav>
 @endif
